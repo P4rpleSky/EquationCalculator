@@ -1,0 +1,30 @@
+<Project>
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
+        <IsPackable>False</IsPackable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <CompanyName>Byndyusoft</CompanyName>
+        <CurrentYear>$([System.DateTime]::Now.ToString(yyyy))</CurrentYear>
+
+        <Copyright>Copyright $(CurrentYear) © $(CompanyName). All rights reserved</Copyright>
+        <Authors>$(CompanyName)</Authors>
+        <Company>$(CompanyName)</Company>
+    </PropertyGroup>
+
+    <!--
+      This instruction automatically allows XXX.Tests to access internals of XXX.
+      Signed assemblies have to add friends manually because of public key requirement.
+    -->
+    <ItemGroup>
+        <InternalsVisibleTo Include="$(CompanyName).$(SolutionName).UnitTests" />
+    </ItemGroup>
+
+</Project>
