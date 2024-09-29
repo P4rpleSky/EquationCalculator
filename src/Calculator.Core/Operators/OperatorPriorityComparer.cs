@@ -7,7 +7,7 @@ internal sealed class OperatorPriorityComparer : IComparer<IOperatorToken>
     private static readonly IReadOnlyDictionary<Type, int> TokenToPriorityMap = new Dictionary<Type, int>
     {
         { typeof(MultiplicationOperatorToken), 50 },
-        { typeof(SubtractionOperatorToken), 50 },
+        { typeof(DivisionOperatorToken), 50 },
         { typeof(AdditionOperatorToken), 100 },
         { typeof(SubtractionOperatorToken), 100 }
     };
@@ -22,7 +22,7 @@ internal sealed class OperatorPriorityComparer : IComparer<IOperatorToken>
         var firstTokenPriority = GetTokenPriority(firstToken);
         var secondTokenPriority = GetTokenPriority(secondToken);
 
-        return firstTokenPriority.CompareTo(secondTokenPriority);
+        return secondTokenPriority.CompareTo(firstTokenPriority);
     }
 
     private static int GetTokenPriority(IOperatorToken token)

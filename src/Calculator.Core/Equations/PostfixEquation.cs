@@ -4,12 +4,17 @@ using Byndyusoft.Calculator.Core.Operators.Binary;
 
 namespace Byndyusoft.Calculator.Core.Equations;
 
-internal sealed class PostfixEquation : Equation
+public sealed class PostfixEquation
 {
     private PostfixEquation(IReadOnlyList<IToken> tokens)
-        : base(tokens)
     {
+        Tokens = tokens;
+        Result = Calculate(tokens);
     }
+
+    public IReadOnlyList<IToken> Tokens { get; }
+
+    public decimal Result { get; }
 
     public static PostfixEquation Create(IReadOnlyList<IToken> tokens)
     {
@@ -45,16 +50,24 @@ internal sealed class PostfixEquation : Equation
             index++;
         }
 
-        return new PostfixEquation(tokens);
+        while (operatorStack.TryPop(out var operatorToken))
+        {
+            output.Push(operatorToken);
+        }
+
+        var outputTokens = output.Reverse().ToList();
+        return new PostfixEquation(outputTokens);
     }
 
-    public decimal Calculate()
+    public override string ToString() => String.Join(' ', Tokens);
+
+    private static decimal Calculate(IReadOnlyList<IToken> tokens)
     {
         var operandStack = new Stack<NumberToken>();
 
-        for (var index = 0; index < Tokens.Count; index++)
+        for (var index = 0; index < tokens.Count; index++)
         {
-            var currentToken = Tokens[index];
+            var currentToken = tokens[index];
 
             switch (currentToken)
             {
@@ -77,5 +90,8 @@ internal sealed class PostfixEquation : Equation
                 }
             }
         }
+
+        // TODO
+        return operandStack.Single().Value;
     }
 }

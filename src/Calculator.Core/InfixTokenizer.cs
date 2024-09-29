@@ -4,7 +4,7 @@ using Byndyusoft.Calculator.Core.Operators;
 
 namespace Byndyusoft.Calculator.Core;
 
-internal static class InfixTokenizer
+public static class InfixTokenizer
 {
     public static IReadOnlyList<IToken> Parse(string input)
     {
