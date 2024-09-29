@@ -2,11 +2,11 @@
 using Byndyusoft.Calculator.Core.Operands;
 using Byndyusoft.Calculator.Core.Operators;
 
-namespace Byndyusoft.Calculator.Core;
+namespace Byndyusoft.Calculator.Core.Formatters;
 
-internal static class InfixTokenizer
+internal static class InfixNotationParser
 {
-    public static IReadOnlyList<IToken> Parse(string input)
+    public static IReadOnlyList<IToken> Create(string input)
     {
         input = input.Replace(" ", String.Empty);
 

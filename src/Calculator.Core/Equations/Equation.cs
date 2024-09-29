@@ -8,8 +8,4 @@ internal abstract class Equation
     }
 
     public IReadOnlyList<IToken> Tokens { get; }
-
-    public Lazy<decimal> Result => new(Calculate);
-
-    public abstract decimal Calculate();
 }

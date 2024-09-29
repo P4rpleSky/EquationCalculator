@@ -12,6 +12,8 @@ internal sealed class NumberToken : IToken
 
     public decimal Value { get; }
 
+    public static NumberToken Create(decimal value) => new(value);
+
     public static bool TryParse(string value, [NotNullWhen(true)] out NumberToken? token)
     {
         if (!Decimal.TryParse(value, CultureInfo.InvariantCulture, out var parsedNumber))
@@ -23,4 +25,6 @@ internal sealed class NumberToken : IToken
         token = new NumberToken(parsedNumber);
         return true;
     }
+
+    public override string ToString() => Value.ToString(CultureInfo.InvariantCulture);
 }

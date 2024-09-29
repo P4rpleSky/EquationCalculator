@@ -1,10 +1,8 @@
 ﻿namespace Byndyusoft.Calculator.Core.Operators.Binary;
 
-internal sealed class DivisionOperatorToken :
-    BinaryOperatorToken<DivisionOperatorToken>,
-    IBinaryOperatorTokenDescription
+internal sealed class DivisionOperatorToken : IBinaryOperatorToken
 {
-    public static char Symbol => '/';
+    public BinaryOperationDelegate Operation => (first, second) => first / second;
 
-    public static BinaryOperationDelegate Operation => (first, second) => first / second;
+    public override string ToString() => "/";
 }

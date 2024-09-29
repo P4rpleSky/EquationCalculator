@@ -1,10 +1,8 @@
 ﻿namespace Byndyusoft.Calculator.Core.Operators.Binary;
 
-internal sealed class AdditionOperatorToken :
-    BinaryOperatorToken<AdditionOperatorToken>,
-    IBinaryOperatorTokenDescription
+internal sealed class AdditionOperatorToken : IBinaryOperatorToken
 {
-    public static char Symbol => '+';
+    public BinaryOperationDelegate Operation => (first, second) => first + second;
 
-    public static BinaryOperationDelegate Operation => (first, second) => first + second;
+    public override string ToString() => "+";
 }

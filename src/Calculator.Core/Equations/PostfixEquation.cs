@@ -1,44 +1,46 @@
 ﻿using Byndyusoft.Calculator.Core.Operands;
 using Byndyusoft.Calculator.Core.Operators;
+using Byndyusoft.Calculator.Core.Operators.Binary;
 
 namespace Byndyusoft.Calculator.Core.Equations;
 
 internal sealed class PostfixEquation : Equation
 {
-    private static readonly IReadOnlyList<IOperandToken> PrioritizedOperations = new List<IOperandToken>
-    {
-
-    }
-
     private PostfixEquation(IReadOnlyList<IToken> tokens)
         : base(tokens)
     {
     }
 
-    public static PostfixEquation CreateFrom(IReadOnlyList<IToken> tokens)
+    public static PostfixEquation Create(IReadOnlyList<IToken> tokens)
     {
-        var index = 0;
+        var operatorPriorityComparer = new OperatorPriorityComparer();
 
         var output = new Stack<IToken>();
-        var operatorStack = new Stack<BinaryOperatorToken222>();
+        var operatorStack = new Stack<IOperatorToken>();
 
+        var index = 0;
         while (index < tokens.Count)
         {
             var currentToken = tokens[index];
 
-            if (currentToken is NumberToken numberToken)
+            switch (currentToken)
             {
-                output.Push(numberToken);
-            }
-            else if (currentToken is IOperatorToken operatorToken)
-            {
-                if (operatorStack.TryPeek(out var lastOperatorToken) && lastOperatorToken > operatorToken)
-                {
-                    operatorStack.Push(binaryOperatorToken);
-                }
-                else ()
-            }
+                case NumberToken numberToken:
+                    output.Push(numberToken);
+                    break;
 
+                case IOperatorToken operatorToken:
+                {
+                    while (operatorStack.TryPeek(out var lastOperatorToken) && operatorPriorityComparer.Compare(lastOperatorToken, operatorToken) >= 0)
+                    {
+                        operatorStack.Pop();
+                        output.Push(lastOperatorToken);
+                    }
+
+                    operatorStack.Push(operatorToken);
+                    break;
+                }
+            }
 
             index++;
         }
@@ -46,8 +48,34 @@ internal sealed class PostfixEquation : Equation
         return new PostfixEquation(tokens);
     }
 
-    public override decimal Calculate()
+    public decimal Calculate()
     {
+        var operandStack = new Stack<NumberToken>();
 
+        for (var index = 0; index < Tokens.Count; index++)
+        {
+            var currentToken = Tokens[index];
+
+            switch (currentToken)
+            {
+                case NumberToken numberToken:
+                    operandStack.Push(numberToken);
+                    break;
+
+                case IBinaryOperatorToken binaryOperatorToken:
+                {
+                    if (!operandStack.TryPop(out var firstOperand) || !operandStack.TryPop(out var secondOperand))
+                    {
+                        throw new InvalidOperationException($"Cannot apply binary operator {binaryOperatorToken.GetType().FullName}: not enough arguments");
+                    }
+
+                    var operationResult = binaryOperatorToken.Operation.Invoke(firstOperand.Value, secondOperand.Value);
+                    var operationResultToken = NumberToken.Create(operationResult);
+
+                    operandStack.Push(operationResultToken);
+                    break;
+                }
+            }
+        }
     }
 }
