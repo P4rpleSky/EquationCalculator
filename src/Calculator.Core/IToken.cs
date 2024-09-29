@@ -1,5 +1,4 @@
 ﻿namespace Byndyusoft.Calculator.Core;
 
-public class Class1
-{
-}
+public interface IToken
+{ }
