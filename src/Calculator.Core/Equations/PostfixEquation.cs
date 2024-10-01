@@ -1,6 +1,7 @@
 ﻿using Byndyusoft.Calculator.Core.Operands;
 using Byndyusoft.Calculator.Core.Operators;
 using Byndyusoft.Calculator.Core.Operators.Binary;
+using Byndyusoft.Calculator.Core.Tokenizers;
 
 namespace Byndyusoft.Calculator.Core.Equations;
 
@@ -65,10 +66,8 @@ public sealed class PostfixEquation
     {
         var operandStack = new Stack<NumberToken>();
 
-        for (var index = 0; index < tokens.Count; index++)
+        foreach (var currentToken in tokens)
         {
-            var currentToken = tokens[index];
-
             switch (currentToken)
             {
                 case NumberToken numberToken:
@@ -77,7 +76,8 @@ public sealed class PostfixEquation
 
                 case IBinaryOperatorToken binaryOperatorToken:
                 {
-                    if (!operandStack.TryPop(out var firstOperand) || !operandStack.TryPop(out var secondOperand))
+                    if (!operandStack.TryPop(out var firstOperand) ||
+                        !operandStack.TryPop(out var secondOperand))
                     {
                         throw new InvalidOperationException($"Cannot apply binary operator {binaryOperatorToken.GetType().FullName}: not enough arguments");
                     }
