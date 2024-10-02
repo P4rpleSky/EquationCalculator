@@ -5,6 +5,8 @@ namespace EquationCalculator.Core.Operands;
 
 internal sealed class NumberToken : IToken
 {
+    public static readonly NumberToken Zero = new(0);
+
     private NumberToken(decimal value)
     {
         Value = value;

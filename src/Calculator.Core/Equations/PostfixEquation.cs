@@ -75,14 +75,10 @@ public sealed class PostfixEquation
 
                 case IBinaryOperatorToken binaryOperatorToken:
                 {
-                    if (!operandStack.TryPop(out var firstOperand) ||
-                        !operandStack.TryPop(out var secondOperand))
-                    {
-                        throw new InvalidOperationException($"Cannot apply binary operator {binaryOperatorToken.GetType().FullName}: not enough arguments");
-                    }
+                    var secondOperand = operandStack.TryPop(out var operand) ? operand : null;
+                    var firstOperand = operandStack.TryPop(out operand) ? operand : null;
 
-                    var operationResult = binaryOperatorToken.Operation.Invoke(firstOperand.Value, secondOperand.Value);
-                    var operationResultToken = NumberToken.Create(operationResult);
+                    var operationResultToken = ProcessBinaryOperationToken(binaryOperatorToken, firstOperand, secondOperand);
 
                     operandStack.Push(operationResultToken);
                     break;
@@ -92,5 +88,88 @@ public sealed class PostfixEquation
 
         // TODO
         return operandStack.Single().Value;
+    }
+
+    private static NumberToken ProcessBinaryOperationToken<T>(
+        IBinaryOperatorToken binaryOperatorToken,
+        NumberToken? firstOperand,
+        NumberToken? secondOperand)
+        where T : class, IBinaryOperatorToken
+    {
+        return binaryOperatorToken switch
+        {
+            AdditionOperatorToken => ProcessAddition(firstOperand, secondOperand),
+            SubtractionOperatorToken => ProcessSubtraction(firstOperand, secondOperand),
+            MultiplicationOperatorToken => ProcessMultiplication(firstOperand, secondOperand),
+            DivisionOperatorToken => ProcessDivision(firstOperand, secondOperand),
+            _ => ProcessDefault<T>(firstOperand, secondOperand)
+        };
+    }
+
+    private static NumberToken ProcessAddition(NumberToken? firstOperand, NumberToken? secondOperand)
+    {
+        firstOperand ??= NumberToken.Zero;
+
+        if (secondOperand is null)
+        {
+            throw new InvalidOperationException("Second operand should be specified for the addition operator");
+        }
+
+        return CreateNumberToken<AdditionOperatorToken>(firstOperand, secondOperand);
+    }
+
+    private static NumberToken ProcessSubtraction(NumberToken? firstOperand, NumberToken? secondOperand)
+    {
+        firstOperand ??= NumberToken.Zero;
+
+        if (secondOperand is null)
+        {
+            throw new InvalidOperationException("Second operand should be specified for the subtraction operator");
+        }
+
+        return CreateNumberToken<SubtractionOperatorToken>(firstOperand, secondOperand);
+    }
+
+    private static NumberToken ProcessMultiplication(NumberToken? firstOperand, NumberToken? secondOperand)
+    {
+        if (firstOperand is null || secondOperand is null)
+        {
+            throw new InvalidOperationException("Both arguments should be specified for the multiplication operator");
+        }
+
+        return CreateNumberToken<MultiplicationOperatorToken>(firstOperand, secondOperand);
+    }
+
+    private static NumberToken ProcessDivision(NumberToken? firstOperand, NumberToken? secondOperand)
+    {
+        if (firstOperand is null || secondOperand is null)
+        {
+            throw new InvalidOperationException("Both arguments should be specified for the division operator");
+        }
+
+        if (secondOperand == NumberToken.Zero)
+        {
+            throw new InvalidOperationException("Division by zero isn't allowed");
+        }
+
+        return CreateNumberToken<DivisionOperatorToken>(firstOperand, secondOperand);
+    }
+
+    private static NumberToken ProcessDefault<T>(NumberToken? firstOperand, NumberToken? secondOperand)
+        where T : IBinaryOperatorToken
+    {
+        if (firstOperand is null || secondOperand is null)
+        {
+            throw new InvalidOperationException($"Both arguments should be specified for the  operator");
+        }
+
+        return CreateNumberToken<T>(firstOperand, secondOperand);
+    }
+
+    private static NumberToken CreateNumberToken<T>(NumberToken firstOperand, NumberToken secondOperand)
+        where T : IBinaryOperatorToken
+    {
+        var result = T.Operation.Invoke(firstOperand.Value, secondOperand.Value);
+        return NumberToken.Create(result);
     }
 }
