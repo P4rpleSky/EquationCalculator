@@ -1,12 +1,12 @@
-﻿using Byndyusoft.Calculator.Core;
-using Byndyusoft.Calculator.Core.Operands;
-using Byndyusoft.Calculator.Core.Operators.Binary;
-using Byndyusoft.Calculator.Core.Operators.Brackets;
-using Byndyusoft.Calculator.Core.Tokenizers;
+﻿using ExpressionCalculator.Core;
+using ExpressionCalculator.Core.Operands;
+using ExpressionCalculator.Core.Operators.Binary;
+using ExpressionCalculator.Core.Operators.Brackets;
+using ExpressionCalculator.Core.Tokenizers;
 using FluentAssertions;
 using Xunit;
 
-namespace Byndyusoft.Calculator.UnitTests;
+namespace ExpressionCalculator.UnitTests;
 
 public sealed class InfixNotationTokenizerTest
 {

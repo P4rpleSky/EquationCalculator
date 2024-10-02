@@ -1,11 +1,11 @@
-﻿using Byndyusoft.Calculator.Core;
-using Byndyusoft.Calculator.Core.Equations;
-using Byndyusoft.Calculator.Core.Operands;
-using Byndyusoft.Calculator.Core.Operators.Binary;
+﻿using ExpressionCalculator.Core;
+using ExpressionCalculator.Core.Equations;
+using ExpressionCalculator.Core.Operands;
+using ExpressionCalculator.Core.Operators.Binary;
 using FluentAssertions;
 using Xunit;
 
-namespace Byndyusoft.Calculator.UnitTests;
+namespace ExpressionCalculator.UnitTests;
 
 public sealed class PostfixEquationTest
 {

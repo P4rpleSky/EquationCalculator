@@ -1,4 +1,4 @@
-﻿namespace Byndyusoft.Calculator.Core.Operators.Binary;
+﻿namespace ExpressionCalculator.Core.Operators.Binary;
 
 internal readonly struct SubtractionOperatorToken : IBinaryOperatorToken
 {

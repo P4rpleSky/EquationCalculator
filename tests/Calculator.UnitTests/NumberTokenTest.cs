@@ -1,8 +1,8 @@
-﻿using Byndyusoft.Calculator.Core.Operands;
+﻿using ExpressionCalculator.Core.Operands;
 using FluentAssertions;
 using Xunit;
 
-namespace Byndyusoft.Calculator.UnitTests;
+namespace ExpressionCalculator.UnitTests;
 
 public sealed class NumberTokenTest
 {

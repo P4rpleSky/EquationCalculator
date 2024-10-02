@@ -1,3 +1,3 @@
-﻿namespace Byndyusoft.Calculator.Core;
+﻿namespace ExpressionCalculator.Core;
 
 public interface IToken;

@@ -1,3 +1,3 @@
-﻿namespace Byndyusoft.Calculator.Core.Operators;
+﻿namespace ExpressionCalculator.Core.Operators;
 
 internal interface IOperatorToken : IToken;

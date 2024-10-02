@@ -1,4 +1,4 @@
-﻿namespace Byndyusoft.Calculator.Core.Operators.Brackets;
+﻿namespace ExpressionCalculator.Core.Operators.Brackets;
 
 internal readonly struct ClosingBracketOperator : IOperatorToken
 {

@@ -1,6 +1,5 @@
-﻿using Byndyusoft.Calculator.Core;
-using Byndyusoft.Calculator.Core.Equations;
-using Byndyusoft.Calculator.Core.Tokenizers;
+﻿using ExpressionCalculator.Core.Equations;
+using ExpressionCalculator.Core.Tokenizers;
 
 string? input;
 

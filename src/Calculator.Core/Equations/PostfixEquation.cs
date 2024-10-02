@@ -1,8 +1,8 @@
-﻿using Byndyusoft.Calculator.Core.Operands;
-using Byndyusoft.Calculator.Core.Operators;
-using Byndyusoft.Calculator.Core.Operators.Binary;
+﻿using ExpressionCalculator.Core.Operands;
+using ExpressionCalculator.Core.Operators;
+using ExpressionCalculator.Core.Operators.Binary;
 
-namespace Byndyusoft.Calculator.Core.Equations;
+namespace ExpressionCalculator.Core.Equations;
 
 public sealed class PostfixEquation
 {

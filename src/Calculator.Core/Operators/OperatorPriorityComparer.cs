@@ -1,7 +1,7 @@
-﻿using Byndyusoft.Calculator.Core.Operators.Binary;
-using Byndyusoft.Calculator.Core.Operators.Brackets;
+﻿using ExpressionCalculator.Core.Operators.Binary;
+using ExpressionCalculator.Core.Operators.Brackets;
 
-namespace Byndyusoft.Calculator.Core.Operators;
+namespace ExpressionCalculator.Core.Operators;
 
 internal sealed class OperatorPriorityComparer : IComparer<IOperatorToken>
 {

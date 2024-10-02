@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
-using Byndyusoft.Calculator.Core.Operators;
+using ExpressionCalculator.Core.Operators;
 using FluentAssertions;
 using Xunit;
 
-namespace Byndyusoft.Calculator.UnitTests;
+namespace ExpressionCalculator.UnitTests;
 
 public sealed class OperatorPriorityComparerTest
 {

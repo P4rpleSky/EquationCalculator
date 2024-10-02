@@ -1,9 +1,9 @@
 ﻿using System.Text;
-using Byndyusoft.Calculator.Core.Operands;
-using Byndyusoft.Calculator.Core.Operators;
+using ExpressionCalculator.Core.Operands;
+using ExpressionCalculator.Core.Operators;
 using Utilities;
 
-namespace Byndyusoft.Calculator.Core.Tokenizers;
+namespace ExpressionCalculator.Core.Tokenizers;
 
 public static class InfixNotationTokenizer
 {

@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
-namespace Byndyusoft.Calculator.Core.Operands;
+namespace ExpressionCalculator.Core.Operands;
 
 internal sealed class NumberToken : IToken
 {
