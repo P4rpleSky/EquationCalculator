@@ -15,7 +15,7 @@ public sealed class PostfixEquationTest
     private static readonly DivisionOperatorToken Divide = new();
 
     [Theory]
-    [MemberData(nameof(ValidPostfixEquations))]
+    [MemberData(nameof(GetValidPostfixEquations))]
     public void ShouldCreateAndEvaluateValidEquation(IReadOnlyList<IToken> tokens, decimal expectedResult)
     {
         // Arrange
@@ -27,13 +27,42 @@ public sealed class PostfixEquationTest
         actualEquation.Result.Should().Be(expectedResult);
     }
 
-    public static IEnumerable<object[]> ValidPostfixEquations()
+    [Theory]
+    [MemberData(nameof(GetInvalidPostfixEquations))]
+    public void ShouldThrowOnInvalidEquation(IReadOnlyList<IToken> tokens)
+    {
+        // Arrange
+
+        // Act
+        var createEquation = () => PostfixEquation.Create(tokens);
+
+        // Assert
+        createEquation.Should().Throw<InvalidOperationException>();
+    }
+
+
+    public static IEnumerable<object[]> GetValidPostfixEquations()
     {
         return
         [
+            [Array.Empty<IToken>(), 0],
+            [new List<IToken> { Num(97.982m) }, 97.982],
             [new List<IToken> { Num(2), Plus, Num(2) }, 4],
-            [new List<IToken> { Num(3), Plus, Num(3), Times, Num(3) }, 12],
+            [new List<IToken> { Plus, Num(2), Plus, Num(3), Times, Num(4) }, 14],
+            [new List<IToken> { Num(2), Times, Num(35.589m), Plus, Num(4) }, 75.178],
             [new List<IToken> { Minus, Num(1), Divide, Num(100) }, -0.01],
+        ];
+    }
+
+    public static IEnumerable<object[]> GetInvalidPostfixEquations()
+    {
+        return
+        [
+            [new List<IToken> { Plus }],
+            [new List<IToken> { Minus }],
+            [new List<IToken> { Num(2), Times }],
+            [new List<IToken> { Divide, Num(9.9m) }],
+            [new List<IToken> { Num(978), Divide, NumberToken.Zero }]
         ];
     }
 

@@ -63,6 +63,11 @@ public sealed class PostfixEquation
 
     private static decimal Calculate(IReadOnlyList<IToken> tokens)
     {
+        if (!tokens.Any())
+        {
+            return 0;
+        }
+
         var operandStack = new Stack<NumberToken>();
 
         foreach (var currentToken in tokens)
