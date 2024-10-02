@@ -1,4 +1,4 @@
-name: P4S.Identity
+name: EquationCalculator
 
 on:
   push:
