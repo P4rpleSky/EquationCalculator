@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
-namespace ExpressionCalculator.Core.Operands;
+namespace EquationCalculator.Core.Operands;
 
 internal sealed class NumberToken : IToken
 {

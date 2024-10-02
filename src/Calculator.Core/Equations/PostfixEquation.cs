@@ -1,8 +1,8 @@
-﻿using ExpressionCalculator.Core.Operands;
-using ExpressionCalculator.Core.Operators;
-using ExpressionCalculator.Core.Operators.Binary;
+﻿using EquationCalculator.Core.Operands;
+using EquationCalculator.Core.Operators;
+using EquationCalculator.Core.Operators.Binary;
 
-namespace ExpressionCalculator.Core.Equations;
+namespace EquationCalculator.Core.Equations;
 
 public sealed class PostfixEquation
 {

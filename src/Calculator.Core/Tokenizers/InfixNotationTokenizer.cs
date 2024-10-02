@@ -1,9 +1,9 @@
 ﻿using System.Text;
-using ExpressionCalculator.Core.Operands;
-using ExpressionCalculator.Core.Operators;
+using EquationCalculator.Core.Operands;
+using EquationCalculator.Core.Operators;
 using Utilities;
 
-namespace ExpressionCalculator.Core.Tokenizers;
+namespace EquationCalculator.Core.Tokenizers;
 
 public static class InfixNotationTokenizer
 {

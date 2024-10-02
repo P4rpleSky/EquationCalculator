@@ -1,4 +1,4 @@
-﻿namespace ExpressionCalculator.Core.Operators.Binary;
+﻿namespace EquationCalculator.Core.Operators.Binary;
 
 internal interface IBinaryOperatorToken : IOperatorToken
 {

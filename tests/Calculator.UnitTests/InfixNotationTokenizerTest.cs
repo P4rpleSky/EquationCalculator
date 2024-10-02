@@ -1,12 +1,12 @@
-﻿using ExpressionCalculator.Core;
-using ExpressionCalculator.Core.Operands;
-using ExpressionCalculator.Core.Operators.Binary;
-using ExpressionCalculator.Core.Operators.Brackets;
-using ExpressionCalculator.Core.Tokenizers;
+﻿using EquationCalculator.Core;
+using EquationCalculator.Core.Operands;
+using EquationCalculator.Core.Operators.Binary;
+using EquationCalculator.Core.Operators.Brackets;
+using EquationCalculator.Core.Tokenizers;
 using FluentAssertions;
 using Xunit;
 
-namespace ExpressionCalculator.UnitTests;
+namespace EquationCalculator.UnitTests;
 
 public sealed class InfixNotationTokenizerTest
 {

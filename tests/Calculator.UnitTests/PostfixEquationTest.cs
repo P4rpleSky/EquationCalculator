@@ -1,11 +1,11 @@
-﻿using ExpressionCalculator.Core;
-using ExpressionCalculator.Core.Equations;
-using ExpressionCalculator.Core.Operands;
-using ExpressionCalculator.Core.Operators.Binary;
+﻿using EquationCalculator.Core;
+using EquationCalculator.Core.Equations;
+using EquationCalculator.Core.Operands;
+using EquationCalculator.Core.Operators.Binary;
 using FluentAssertions;
 using Xunit;
 
-namespace ExpressionCalculator.UnitTests;
+namespace EquationCalculator.UnitTests;
 
 public sealed class PostfixEquationTest
 {

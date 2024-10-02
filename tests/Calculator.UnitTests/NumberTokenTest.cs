@@ -1,8 +1,8 @@
-﻿using ExpressionCalculator.Core.Operands;
+﻿using EquationCalculator.Core.Operands;
 using FluentAssertions;
 using Xunit;
 
-namespace ExpressionCalculator.UnitTests;
+namespace EquationCalculator.UnitTests;
 
 public sealed class NumberTokenTest
 {

@@ -1,5 +1,5 @@
-﻿using ExpressionCalculator.Core.Equations;
-using ExpressionCalculator.Core.Tokenizers;
+﻿using EquationCalculator.Core.Equations;
+using EquationCalculator.Core.Tokenizers;
 
 string? input;
 

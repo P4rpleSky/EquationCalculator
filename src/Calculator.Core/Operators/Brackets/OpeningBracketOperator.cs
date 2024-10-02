@@ -1,4 +1,4 @@
-﻿namespace ExpressionCalculator.Core.Operators.Brackets;
+﻿namespace EquationCalculator.Core.Operators.Brackets;
 
 internal readonly struct OpeningBracketOperator : IOperatorToken
 {

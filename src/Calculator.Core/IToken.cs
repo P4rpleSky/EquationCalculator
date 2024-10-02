@@ -1,3 +1,3 @@
-﻿namespace ExpressionCalculator.Core;
+﻿namespace EquationCalculator.Core;
 
 public interface IToken;

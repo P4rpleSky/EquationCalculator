@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using ExpressionCalculator.Core.Operators.Binary;
-using ExpressionCalculator.Core.Operators.Brackets;
+using EquationCalculator.Core.Operators.Binary;
+using EquationCalculator.Core.Operators.Brackets;
 
-namespace ExpressionCalculator.Core.Operators;
+namespace EquationCalculator.Core.Operators;
 
 internal static class CharToOperatorTokenConverter
 {
