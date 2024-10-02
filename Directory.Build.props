@@ -24,7 +24,7 @@
       Signed assemblies have to add friends manually because of public key requirement.
     -->
     <ItemGroup>
-        <InternalsVisibleTo Include="$(CompanyName).$(SolutionName).UnitTests" />
+        <InternalsVisibleTo Include="$(SolutionName).UnitTests" />
     </ItemGroup>
 
 </Project>

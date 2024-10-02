@@ -1,6 +1,6 @@
 ﻿namespace Byndyusoft.Calculator.Core.Operators.Binary;
 
-internal sealed class SubtractionOperatorToken : IBinaryOperatorToken
+internal readonly struct SubtractionOperatorToken : IBinaryOperatorToken
 {
     public BinaryOperationDelegate Operation => (first, second) => first - second;
 

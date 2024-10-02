@@ -1,6 +1,6 @@
 ﻿namespace Byndyusoft.Calculator.Core.Operators.Binary;
 
-internal sealed class MultiplicationOperatorToken : IBinaryOperatorToken
+internal readonly struct MultiplicationOperatorToken : IBinaryOperatorToken
 {
     public BinaryOperationDelegate Operation => (first, second) => first * second;
 

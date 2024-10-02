@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Byndyusoft.Calculator.Core.Operands;
 using Byndyusoft.Calculator.Core.Operators;
+using Utilities;
 
 namespace Byndyusoft.Calculator.Core.Tokenizers;
 
@@ -12,7 +13,7 @@ public static class InfixNotationTokenizer
 
         if (String.IsNullOrWhiteSpace(input))
         {
-            throw new ArgumentException("Input string should not be empty");
+            return [];
         }
 
         var numberSymbolsBuffer = new StringBuilder();
@@ -20,7 +21,7 @@ public static class InfixNotationTokenizer
 
         foreach (var symbol in input)
         {
-            if (!OperatorTokenParser.TryParse(symbol, out var operationToken))
+            if (!CharToOperatorTokenConverter.TryParse(symbol, out var operationToken))
             {
                 numberSymbolsBuffer.Append(symbol);
                 continue;
@@ -28,25 +29,23 @@ public static class InfixNotationTokenizer
 
             var numberToken = FlushBuffer(numberSymbolsBuffer);
 
-            tokens.Add(numberToken);
+            tokens.AddIfNotNull(numberToken);
             tokens.Add(operationToken);
         }
 
         var lastNumberToken = FlushBuffer(numberSymbolsBuffer);
-        tokens.Add(lastNumberToken);
+        tokens.AddIfNotNull(lastNumberToken);
 
         return tokens;
     }
 
-    private static NumberToken FlushBuffer(StringBuilder numberSymbolsBuffer)
+    private static NumberToken? FlushBuffer(StringBuilder numberSymbolsBuffer)
     {
         var unparsedNumber = numberSymbolsBuffer.ToString();
-        if (!NumberToken.TryParse(unparsedNumber, out var numberToken))
-        {
-            throw new InvalidOperationException($"Invalid number format: «{unparsedNumber}»");
-        }
-
         numberSymbolsBuffer.Clear();
-        return numberToken;
+
+        return NumberToken.TryParse(unparsedNumber, out var numberToken)
+            ? numberToken
+            : null;
     }
 }

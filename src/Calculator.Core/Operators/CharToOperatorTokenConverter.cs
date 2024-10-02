@@ -1,9 +1,10 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Byndyusoft.Calculator.Core.Operators.Binary;
+using Byndyusoft.Calculator.Core.Operators.Brackets;
 
 namespace Byndyusoft.Calculator.Core.Operators;
 
-internal static class OperatorTokenParser
+internal static class CharToOperatorTokenConverter
 {
     private static readonly IReadOnlyDictionary<char, IOperatorToken> SymbolToTokenMap = new Dictionary<char, IOperatorToken>
     {
@@ -11,6 +12,8 @@ internal static class OperatorTokenParser
         { '-', new SubtractionOperatorToken() },
         { '*', new MultiplicationOperatorToken() },
         { '/', new DivisionOperatorToken() },
+        { '(', new OpeningBracketOperator() },
+        { ')', new ClosingBracketOperator() },
     };
 
     public static bool TryParse(char symbol, [NotNullWhen(true)] out IOperatorToken? token)

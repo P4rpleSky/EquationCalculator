@@ -1,7 +1,6 @@
 ﻿using Byndyusoft.Calculator.Core.Operands;
 using Byndyusoft.Calculator.Core.Operators;
 using Byndyusoft.Calculator.Core.Operators.Binary;
-using Byndyusoft.Calculator.Core.Tokenizers;
 
 namespace Byndyusoft.Calculator.Core.Equations;
 
