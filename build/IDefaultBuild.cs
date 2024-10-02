@@ -31,7 +31,8 @@ interface IDefaultBuild
             DotNetTest(settings =>
                 settings
                     .SetNoBuild(true)
-                    .SetNoRestore(true));
+                    .SetNoRestore(true)
+                    .SetConfiguration("Release"));
         });
 
     Target Formatting => _ => _
