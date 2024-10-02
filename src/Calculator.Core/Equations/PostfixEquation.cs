@@ -35,16 +35,16 @@ public sealed class PostfixEquation
                     break;
 
                 case IOperatorToken operatorToken:
-                {
-                    while (operatorStack.TryPeek(out var lastOperatorToken) && operatorPriorityComparer.Compare(lastOperatorToken, operatorToken) >= 0)
                     {
-                        operatorStack.Pop();
-                        output.Push(lastOperatorToken);
-                    }
+                        while (operatorStack.TryPeek(out var lastOperatorToken) && operatorPriorityComparer.Compare(lastOperatorToken, operatorToken) >= 0)
+                        {
+                            operatorStack.Pop();
+                            output.Push(lastOperatorToken);
+                        }
 
-                    operatorStack.Push(operatorToken);
-                    break;
-                }
+                        operatorStack.Push(operatorToken);
+                        break;
+                    }
             }
 
             index++;
@@ -74,15 +74,15 @@ public sealed class PostfixEquation
                     break;
 
                 case IBinaryOperatorToken binaryOperatorToken:
-                {
-                    var secondOperand = operandStack.TryPop(out var operand) ? operand : null;
-                    var firstOperand = operandStack.TryPop(out operand) ? operand : null;
+                    {
+                        var secondOperand = operandStack.TryPop(out var operand) ? operand : null;
+                        var firstOperand = operandStack.TryPop(out operand) ? operand : null;
 
-                    var operationResultToken = ProcessBinaryOperationToken(binaryOperatorToken, firstOperand, secondOperand);
+                        var operationResultToken = ProcessBinaryOperationToken(binaryOperatorToken, firstOperand, secondOperand);
 
-                    operandStack.Push(operationResultToken);
-                    break;
-                }
+                        operandStack.Push(operationResultToken);
+                        break;
+                    }
             }
         }
 

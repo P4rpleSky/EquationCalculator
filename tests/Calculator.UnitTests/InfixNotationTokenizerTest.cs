@@ -37,8 +37,8 @@ public sealed class InfixNotationTokenizerTest
         return
         [
             ["       ", Array.Empty<IToken>()],
-            [ "2 + 4 * 8 - 9 / 5", new List<IToken> { Num(2), Plus, Num(4), Times, Num(8), Minus, Num(9), Divide, Num(5) } ],
-            [ "))((*/*+-/", new List<IToken> { Close, Close, Open, Open, Times, Divide, Times, Plus, Minus, Divide } ]
+            ["2 + 4 * 8 - 9 / 5", new List<IToken> { Num(2), Plus, Num(4), Times, Num(8), Minus, Num(9), Divide, Num(5) }],
+            ["))((*/*+-/", new List<IToken> { Close, Close, Open, Open, Times, Divide, Times, Plus, Minus, Divide }]
         ];
     }
 }
