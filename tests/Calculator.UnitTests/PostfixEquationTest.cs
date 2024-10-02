@@ -33,7 +33,7 @@ public sealed class PostfixEquationTest
         [
             [ new List<IToken> { Num(2), Plus, Num(2) }, 4 ],
             [ new List<IToken> { Num(3), Plus, Num(3), Times, Num(3)}, 12 ],
-            [ new List<IToken> { Minus, Num(1), Divide, Num(100) }, 0.01d ],
+            [ new List<IToken> { Minus, Num(1), Divide, Num(100) }, -0.01 ],
         ];
     }
 

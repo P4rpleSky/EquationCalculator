@@ -7,9 +7,9 @@ namespace EquationCalculator.UnitTests;
 public sealed class NumberTokenTest
 {
     [Theory]
-    [InlineData("92485", 92485d)]
-    [InlineData("0.8836", 0.8836d)]
-    [InlineData("2,345", 2.345d)]
+    [InlineData("92485", 92485)]
+    [InlineData("0.8836", 0.8836)]
+    [InlineData("2,345", 2.345)]
     public void ShouldParseValidInput(string input, decimal expectedNum)
     {
         // Arrange

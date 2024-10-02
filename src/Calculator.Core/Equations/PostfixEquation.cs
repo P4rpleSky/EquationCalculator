@@ -90,11 +90,10 @@ public sealed class PostfixEquation
         return operandStack.Single().Value;
     }
 
-    private static NumberToken ProcessBinaryOperationToken<T>(
+    private static NumberToken ProcessBinaryOperationToken(
         IBinaryOperatorToken binaryOperatorToken,
         NumberToken? firstOperand,
         NumberToken? secondOperand)
-        where T : class, IBinaryOperatorToken
     {
         return binaryOperatorToken switch
         {
@@ -102,7 +101,7 @@ public sealed class PostfixEquation
             SubtractionOperatorToken => ProcessSubtraction(firstOperand, secondOperand),
             MultiplicationOperatorToken => ProcessMultiplication(firstOperand, secondOperand),
             DivisionOperatorToken => ProcessDivision(firstOperand, secondOperand),
-            _ => ProcessDefault<T>(firstOperand, secondOperand)
+            _ => throw new ArgumentOutOfRangeException(nameof(binaryOperatorToken))
         };
     }
 
@@ -153,17 +152,6 @@ public sealed class PostfixEquation
         }
 
         return CreateNumberToken<DivisionOperatorToken>(firstOperand, secondOperand);
-    }
-
-    private static NumberToken ProcessDefault<T>(NumberToken? firstOperand, NumberToken? secondOperand)
-        where T : IBinaryOperatorToken
-    {
-        if (firstOperand is null || secondOperand is null)
-        {
-            throw new InvalidOperationException($"Both arguments should be specified for the  operator");
-        }
-
-        return CreateNumberToken<T>(firstOperand, secondOperand);
     }
 
     private static NumberToken CreateNumberToken<T>(NumberToken firstOperand, NumberToken secondOperand)
