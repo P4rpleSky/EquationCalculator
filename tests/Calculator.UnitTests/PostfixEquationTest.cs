@@ -16,12 +16,12 @@ public sealed class PostfixEquationTest
 
     [Theory]
     [MemberData(nameof(GetValidPostfixEquations))]
-    public void ShouldCreateAndEvaluateValidEquation(IReadOnlyList<IToken> tokens, decimal expectedResult)
+    public void ShouldCreateAndEvaluateValidEquation(TokensList tokens, decimal expectedResult)
     {
         // Arrange
 
         // Act
-        var actualEquation = PostfixEquation.Create(tokens);
+        var actualEquation = PostfixEquation.Create(tokens.Value);
 
         // Assert
         actualEquation.Result.Should().Be(expectedResult);
@@ -29,12 +29,12 @@ public sealed class PostfixEquationTest
 
     [Theory]
     [MemberData(nameof(GetInvalidPostfixEquations))]
-    public void ShouldThrowOnInvalidEquation(IReadOnlyList<IToken> tokens)
+    public void ShouldThrowOnInvalidEquation(TokensList tokens)
     {
         // Arrange
 
         // Act
-        var createEquation = () => PostfixEquation.Create(tokens);
+        var createEquation = () => PostfixEquation.Create(tokens.Value);
 
         // Assert
         createEquation.Should().Throw<InvalidOperationException>();
@@ -45,12 +45,12 @@ public sealed class PostfixEquationTest
     {
         return
         [
-            [Array.Empty<IToken>(), 0],
-            [new List<IToken> { Num(97.982m) }, 97.982],
-            [new List<IToken> { Num(2), Plus, Num(2) }, 4],
-            [new List<IToken> { Plus, Num(2), Plus, Num(3), Times, Num(4) }, 14],
-            [new List<IToken> { Num(2), Times, Num(35.589m), Plus, Num(4) }, 75.178],
-            [new List<IToken> { Minus, Num(1), Divide, Num(100) }, -0.01],
+            [new TokensList(), 0],
+            [new TokensList(Num(97.982m)), 97.982],
+            [new TokensList(Num(2), Plus, Num(2)), 4],
+            [new TokensList(Plus, Num(2), Plus, Num(3), Times, Num(4)), 14],
+            [new TokensList(Num(2), Times, Num(35.589m), Plus, Num(4)), 75.178],
+            [new TokensList(Minus, Num(1), Divide, Num(100)), -0.01],
         ];
     }
 
@@ -58,13 +58,21 @@ public sealed class PostfixEquationTest
     {
         return
         [
-            [new List<IToken> { Plus }],
-            [new List<IToken> { Minus }],
-            [new List<IToken> { Num(2), Times }],
-            [new List<IToken> { Divide, Num(9.9m) }],
-            [new List<IToken> { Num(978), Divide, NumberToken.Zero }]
+            [new TokensList(Plus)],
+            [new TokensList(Minus)],
+            [new TokensList(Num(2), Times)],
+            [new TokensList(Divide, Num(9.9m))],
+            [new TokensList(Num(978), Divide, NumberToken.Zero)]
         ];
     }
 
     private static NumberToken Num(decimal number) => NumberToken.Create(number);
+
+    // Only for changing display name in "TheoryAttribute"
+    public sealed class TokensList(params IToken[] tokens)
+    {
+        public IReadOnlyList<IToken> Value { get; } = tokens;
+
+        public override string ToString() => String.Join(' ', Value);
+    }
 }
