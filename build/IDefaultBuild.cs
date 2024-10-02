@@ -33,7 +33,7 @@ interface IDefaultBuild
                     .SetNoBuild(true)
                     .SetNoRestore(true)
                     .SetConfiguration("Release")
-                    .SetVerbosity(DotNetVerbosity.detailed));
+                    .SetVerbosity(DotNetVerbosity.normal));
         });
 
     Target Formatting => _ => _
