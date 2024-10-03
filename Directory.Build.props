@@ -19,10 +19,6 @@
         <Company>$(CompanyName)</Company>
     </PropertyGroup>
 
-    <!--
-      This instruction automatically allows XXX.Tests to access internals of XXX.
-      Signed assemblies have to add friends manually because of public key requirement.
-    -->
     <ItemGroup>
         <InternalsVisibleTo Include="$(SolutionName).UnitTests" />
     </ItemGroup>
