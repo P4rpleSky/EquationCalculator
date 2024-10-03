@@ -22,13 +22,6 @@ public sealed class PostfixEquationTest
     public void ShouldCreateAndEvaluateValidEquation(TokensList tokens, decimal expectedResult)
     {
         // Arrange
-        var a1 = new AdditionOperatorToken();
-        var a2 = new AdditionOperatorToken();
-        var a3 = new MultiplicationOperatorToken();
-        if (a1.Equals(a2) || a2.Equals(a3) || a2.Operation.Equals(a3.Operation))
-        {
-
-        }
 
         // Act
         var actualEquation = PostfixEquation.CreateFromInfixSequence(tokens.Value);
