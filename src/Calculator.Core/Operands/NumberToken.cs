@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace EquationCalculator.Core.Operands;
 
-internal sealed class NumberToken : IToken
+internal readonly struct NumberToken : IToken, IEquatable<NumberToken>
 {
     public static readonly NumberToken Zero = new(0);
 
@@ -30,4 +30,18 @@ internal sealed class NumberToken : IToken
     }
 
     public override string ToString() => Value.ToString(CultureInfo.InvariantCulture);
+
+    #region Equatable Members
+
+    public bool Equals(NumberToken other) => Value == other.Value;
+
+    public override bool Equals(object? obj) => obj is NumberToken other && Equals(other);
+
+    public override int GetHashCode() => Value.GetHashCode();
+
+    public static bool operator ==(NumberToken? left, NumberToken? right) => Equals(left, right);
+
+    public static bool operator !=(NumberToken? left, NumberToken? right) => !Equals(left, right);
+
+    #endregion
 }

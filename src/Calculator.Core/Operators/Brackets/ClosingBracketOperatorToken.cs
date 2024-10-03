@@ -1,6 +1,18 @@
 ﻿namespace EquationCalculator.Core.Operators.Brackets;
 
-internal readonly struct ClosingBracketOperatorToken : IBracketToken
+internal sealed class ClosingBracketOperatorToken : IBracketToken, IEquatable<ClosingBracketOperatorToken>
 {
-    public override string ToString() => ")";
+    private const char Symbol = ')';
+
+    public override string ToString() => Symbol.ToString();
+
+    #region Equatable Members
+
+    public bool Equals(ClosingBracketOperatorToken? other) => other is not null;
+
+    public override bool Equals(object? obj) => Equals(obj as ClosingBracketOperatorToken);
+
+    public override int GetHashCode() => Symbol.GetHashCode();
+
+    #endregion
 }

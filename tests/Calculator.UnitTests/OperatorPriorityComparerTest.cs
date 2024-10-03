@@ -26,7 +26,7 @@ public sealed class OperatorPriorityComparerTest
             .GetAssembly(typeof(IOperatorToken))!
             .GetTypes()
             .Where(type => type.IsAssignableTo(typeof(IOperatorToken)) &&
-                           type is { IsAbstract: false, IsValueType: true })
+                           type is { IsAbstract: false, IsClass: true })
             .Select(type => new object[] { type });
     }
 }
