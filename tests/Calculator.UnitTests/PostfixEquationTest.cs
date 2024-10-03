@@ -37,9 +37,8 @@ public sealed class PostfixEquationTest
         var createEquation = () => PostfixEquation.Create(tokens.Value);
 
         // Assert
-        createEquation.Should().Throw<InvalidOperationException>();
+        createEquation.Should().Throw<InvalidEquationException>();
     }
-
 
     public static IEnumerable<object[]> GetValidPostfixEquations()
     {
@@ -62,7 +61,8 @@ public sealed class PostfixEquationTest
             [new TokensList(Minus)],
             [new TokensList(Num(2), Times)],
             [new TokensList(Divide, Num(9.9m))],
-            [new TokensList(Num(978), Divide, NumberToken.Zero)]
+            [new TokensList(Num(978), Divide, NumberToken.Zero)],
+            [new TokensList(Num(978), Num(978))],
         ];
     }
 

@@ -36,7 +36,8 @@ public sealed class PostfixEquation
 
                 case IOperatorToken operatorToken:
                     {
-                        while (operatorStack.TryPeek(out var lastOperatorToken) && operatorPriorityComparer.Compare(lastOperatorToken, operatorToken) >= 0)
+                        while (operatorStack.TryPeek(out var lastOperatorToken) &&
+                               operatorPriorityComparer.Compare(lastOperatorToken, operatorToken) >= 0)
                         {
                             operatorStack.Pop();
                             output.Push(lastOperatorToken);
@@ -45,6 +46,9 @@ public sealed class PostfixEquation
                         operatorStack.Push(operatorToken);
                         break;
                     }
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(currentToken));
             }
 
             index++;
@@ -79,19 +83,22 @@ public sealed class PostfixEquation
                     break;
 
                 case IBinaryOperatorToken binaryOperatorToken:
-                    {
-                        var secondOperand = operandStack.TryPop(out var operand) ? operand : null;
-                        var firstOperand = operandStack.TryPop(out operand) ? operand : null;
+                    var secondOperand = operandStack.TryPop(out var operand) ? operand : null;
+                    var firstOperand = operandStack.TryPop(out operand) ? operand : null;
+                    var operationResultToken = ProcessBinaryOperationToken(binaryOperatorToken, firstOperand, secondOperand);
+                    operandStack.Push(operationResultToken);
+                    break;
 
-                        var operationResultToken = ProcessBinaryOperationToken(binaryOperatorToken, firstOperand, secondOperand);
-
-                        operandStack.Push(operationResultToken);
-                        break;
-                    }
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(currentToken));
             }
         }
 
-        // TODO
+        if (operandStack.Count != 1)
+        {
+            throw new InvalidEquationException("Final token sequence should contain only one operand");
+        }
+
         return operandStack.Single().Value;
     }
 
@@ -116,7 +123,7 @@ public sealed class PostfixEquation
 
         if (secondOperand is null)
         {
-            throw new InvalidOperationException("Second operand should be specified for the addition operator");
+            throw new InvalidEquationException("Second operand should be specified for the addition operator");
         }
 
         return CreateNumberToken<AdditionOperatorToken>(firstOperand, secondOperand);
@@ -128,7 +135,7 @@ public sealed class PostfixEquation
 
         if (secondOperand is null)
         {
-            throw new InvalidOperationException("Second operand should be specified for the subtraction operator");
+            throw new InvalidEquationException("Second operand should be specified for the subtraction operator");
         }
 
         return CreateNumberToken<SubtractionOperatorToken>(firstOperand, secondOperand);
@@ -138,7 +145,7 @@ public sealed class PostfixEquation
     {
         if (firstOperand is null || secondOperand is null)
         {
-            throw new InvalidOperationException("Both arguments should be specified for the multiplication operator");
+            throw new InvalidEquationException("Both arguments should be specified for the multiplication operator");
         }
 
         return CreateNumberToken<MultiplicationOperatorToken>(firstOperand, secondOperand);
@@ -148,12 +155,12 @@ public sealed class PostfixEquation
     {
         if (firstOperand is null || secondOperand is null)
         {
-            throw new InvalidOperationException("Both arguments should be specified for the division operator");
+            throw new InvalidEquationException("Both arguments should be specified for the division operator");
         }
 
         if (secondOperand == NumberToken.Zero)
         {
-            throw new InvalidOperationException("Division by zero isn't allowed");
+            throw new InvalidEquationException("Division by zero isn't allowed");
         }
 
         return CreateNumberToken<DivisionOperatorToken>(firstOperand, secondOperand);
