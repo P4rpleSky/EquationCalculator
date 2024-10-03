@@ -2,7 +2,7 @@
 using EquationCalculator.Core.Equations;
 using EquationCalculator.Core.Operands;
 using EquationCalculator.Core.Operators;
-using Utilities;
+using EquationCalculator.Utilities;
 
 namespace EquationCalculator.Core.Tokenizers;
 

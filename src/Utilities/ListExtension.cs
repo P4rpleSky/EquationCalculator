@@ -1,4 +1,4 @@
-﻿namespace Utilities;
+﻿namespace EquationCalculator.Utilities;
 
 public static class ListExtension
 {
