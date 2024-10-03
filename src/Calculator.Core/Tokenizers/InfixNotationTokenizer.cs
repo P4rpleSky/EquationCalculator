@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using EquationCalculator.Core.Equations;
 using EquationCalculator.Core.Operands;
 using EquationCalculator.Core.Operators;
 using Utilities;
@@ -44,8 +45,13 @@ public static class InfixNotationTokenizer
         var unparsedNumber = numberSymbolsBuffer.ToString();
         numberSymbolsBuffer.Clear();
 
+        if (String.IsNullOrWhiteSpace(unparsedNumber))
+        {
+            return null;
+        }
+
         return NumberToken.TryParse(unparsedNumber, out var numberToken)
             ? numberToken
-            : null;
+            : throw new InvalidEquationException($"Cannot parse «{unparsedNumber}» to number");
     }
 }

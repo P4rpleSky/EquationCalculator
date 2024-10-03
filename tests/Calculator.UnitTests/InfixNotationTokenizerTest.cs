@@ -1,4 +1,5 @@
 ﻿using EquationCalculator.Core;
+using EquationCalculator.Core.Equations;
 using EquationCalculator.Core.Operands;
 using EquationCalculator.Core.Operators.Binary;
 using EquationCalculator.Core.Operators.Brackets;
@@ -28,6 +29,20 @@ public sealed class InfixNotationTokenizerTest
 
         // Assert
         actualTokens.Should().BeEquivalentTo(expectedTokens, options => options.WithStrictOrdering().RespectingRuntimeTypes());
+    }
+
+    [Theory]
+    [InlineData("dv / dt")]
+    [InlineData("public override string ToString() => String.Join(' ', Tokens);")]
+    public void ShouldThrowOnInvalidInfixString(string input)
+    {
+        // Arrange
+
+        // Act
+        var actualTokens = () => InfixNotationTokenizer.Parse(input);
+
+        // Assert
+        actualTokens.Should().Throw<InvalidEquationException>();
     }
 
     private static NumberToken Num(decimal number) => NumberToken.Create(number);

@@ -30,6 +30,8 @@ public sealed class PostfixEquation
         return new PostfixEquation(postfixTokens, result);
     }
 
+    public override string ToString() => String.Join(' ', Tokens);
+
     private static IReadOnlyList<IToken> InsertMissingZeros(IReadOnlyList<IToken> tokens)
     {
         var result = new List<IToken>(tokens.Count);
