@@ -10,6 +10,6 @@ do
 } while (String.IsNullOrWhiteSpace(input));
 
 var tokens = InfixNotationTokenizer.Parse(input);
-var equation = PostfixEquation.Create(tokens);
+var equation = PostfixEquation.CreateFromInfixSequence(tokens);
 
 Console.WriteLine(equation.Result);

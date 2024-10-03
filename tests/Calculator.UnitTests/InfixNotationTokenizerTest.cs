@@ -14,8 +14,8 @@ public sealed class InfixNotationTokenizerTest
     private static readonly SubtractionOperatorToken Minus = new();
     private static readonly MultiplicationOperatorToken Times = new();
     private static readonly DivisionOperatorToken Divide = new();
-    private static readonly OpeningBracketOperator Open = new();
-    private static readonly ClosingBracketOperator Close = new();
+    private static readonly OpeningBracketOperatorToken Open = new();
+    private static readonly ClosingBracketOperatorToken Close = new();
 
     [Theory]
     [MemberData(nameof(GetValidInfixStrings))]

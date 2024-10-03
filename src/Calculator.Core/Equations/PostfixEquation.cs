@@ -1,6 +1,7 @@
 ﻿using EquationCalculator.Core.Operands;
 using EquationCalculator.Core.Operators;
 using EquationCalculator.Core.Operators.Binary;
+using EquationCalculator.Core.Operators.Brackets;
 
 namespace EquationCalculator.Core.Equations;
 
@@ -16,11 +17,11 @@ public sealed class PostfixEquation
 
     public decimal Result { get; }
 
-    public static PostfixEquation Create(IReadOnlyList<IToken> tokens)
+    public static PostfixEquation CreateFromInfixSequence(IReadOnlyList<IToken> tokens)
     {
         var operatorPriorityComparer = new OperatorPriorityComparer();
 
-        var output = new Stack<IToken>();
+        var output = new Queue<IToken>();
         var operatorStack = new Stack<IOperatorToken>();
 
         var index = 0;
@@ -31,16 +32,44 @@ public sealed class PostfixEquation
             switch (currentToken)
             {
                 case NumberToken numberToken:
-                    output.Push(numberToken);
+                    output.Enqueue(numberToken);
                     break;
+
+                case OpeningBracketOperatorToken openingBracketOperatorToken:
+                    operatorStack.Push(openingBracketOperatorToken);
+                    break;
+
+                case ClosingBracketOperatorToken:
+                    {
+                        while (operatorStack.TryPeek(out var prevOperatorToken) &&
+                               prevOperatorToken is not OpeningBracketOperatorToken)
+                        {
+                            operatorStack.Pop();
+                            output.Enqueue(prevOperatorToken);
+                        }
+
+                        if (!operatorStack.TryPop(out var lastOperatorToken) ||
+                            lastOperatorToken is not OpeningBracketOperatorToken)
+                        {
+                            throw new InvalidEquationException("Incorrect bracket sequence detected");
+                        }
+
+                        break;
+                    }
 
                 case IOperatorToken operatorToken:
                     {
+                        if (IsZeroNumberTokenInsertionNeeded(operatorStack, operatorToken))
+                        {
+                            output.Enqueue(NumberToken.Zero);
+                        }
+
                         while (operatorStack.TryPeek(out var lastOperatorToken) &&
+                               lastOperatorToken is not IBracketToken &&
                                operatorPriorityComparer.Compare(lastOperatorToken, operatorToken) >= 0)
                         {
                             operatorStack.Pop();
-                            output.Push(lastOperatorToken);
+                            output.Enqueue(lastOperatorToken);
                         }
 
                         operatorStack.Push(operatorToken);
@@ -56,14 +85,26 @@ public sealed class PostfixEquation
 
         while (operatorStack.TryPop(out var operatorToken))
         {
-            output.Push(operatorToken);
+            if (operatorToken is IBracketToken)
+            {
+                throw new InvalidEquationException("Incorrect bracket sequence detected");
+            }
+
+            output.Enqueue(operatorToken);
         }
 
-        var outputTokens = output.Reverse().ToList();
+        var outputTokens = output.ToList();
         return new PostfixEquation(outputTokens);
     }
 
     public override string ToString() => String.Join(' ', Tokens);
+
+    private static bool IsZeroNumberTokenInsertionNeeded(Stack<IOperatorToken> operatorStack, IOperatorToken operatorToken)
+    {
+        return operatorToken is AdditionOperatorToken or SubtractionOperatorToken &&
+               operatorStack.TryPeek(out var prevOperatorToken) &&
+               prevOperatorToken is OpeningBracketOperatorToken;
+    }
 
     private static decimal Calculate(IReadOnlyList<IToken> tokens)
     {

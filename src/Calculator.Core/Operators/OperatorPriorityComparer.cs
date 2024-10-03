@@ -7,8 +7,8 @@ internal sealed class OperatorPriorityComparer : IComparer<IOperatorToken>
 {
     private static readonly IReadOnlyDictionary<Type, int> TokenToPriorityMap = new Dictionary<Type, int>
     {
-        { typeof(OpeningBracketOperator), 10 },
-        { typeof(ClosingBracketOperator), 10 },
+        { typeof(OpeningBracketOperatorToken), 10 },
+        { typeof(ClosingBracketOperatorToken), 10 },
         { typeof(MultiplicationOperatorToken), 50 },
         { typeof(DivisionOperatorToken), 50 },
         { typeof(AdditionOperatorToken), 100 },

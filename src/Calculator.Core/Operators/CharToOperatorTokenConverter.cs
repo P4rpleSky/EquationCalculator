@@ -12,8 +12,8 @@ internal static class CharToOperatorTokenConverter
         { '-', new SubtractionOperatorToken() },
         { '*', new MultiplicationOperatorToken() },
         { '/', new DivisionOperatorToken() },
-        { '(', new OpeningBracketOperator() },
-        { ')', new ClosingBracketOperator() },
+        { '(', new OpeningBracketOperatorToken() },
+        { ')', new ClosingBracketOperatorToken() },
     };
 
     public static bool TryParse(char symbol, [NotNullWhen(true)] out IOperatorToken? token)

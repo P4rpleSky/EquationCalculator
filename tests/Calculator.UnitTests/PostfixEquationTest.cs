@@ -2,6 +2,7 @@
 using EquationCalculator.Core.Equations;
 using EquationCalculator.Core.Operands;
 using EquationCalculator.Core.Operators.Binary;
+using EquationCalculator.Core.Operators.Brackets;
 using FluentAssertions;
 using Xunit;
 
@@ -13,47 +14,52 @@ public sealed class PostfixEquationTest
     private static readonly SubtractionOperatorToken Minus = new();
     private static readonly MultiplicationOperatorToken Times = new();
     private static readonly DivisionOperatorToken Divide = new();
+    private static readonly OpeningBracketOperatorToken Open = new();
+    private static readonly ClosingBracketOperatorToken Close = new();
 
     [Theory]
-    [MemberData(nameof(GetValidPostfixEquations))]
+    [MemberData(nameof(GetValidInfixEquations))]
     public void ShouldCreateAndEvaluateValidEquation(TokensList tokens, decimal expectedResult)
     {
         // Arrange
 
         // Act
-        var actualEquation = PostfixEquation.Create(tokens.Value);
+        var actualEquation = PostfixEquation.CreateFromInfixSequence(tokens.Value);
 
         // Assert
         actualEquation.Result.Should().Be(expectedResult);
     }
 
     [Theory]
-    [MemberData(nameof(GetInvalidPostfixEquations))]
+    [MemberData(nameof(GetInvalidInfixEquations))]
     public void ShouldThrowOnInvalidEquation(TokensList tokens)
     {
         // Arrange
 
         // Act
-        var createEquation = () => PostfixEquation.Create(tokens.Value);
+        var createEquation = () => PostfixEquation.CreateFromInfixSequence(tokens.Value);
 
         // Assert
         createEquation.Should().Throw<InvalidEquationException>();
     }
 
-    public static IEnumerable<object[]> GetValidPostfixEquations()
+    public static IEnumerable<object[]> GetValidInfixEquations()
     {
         return
         [
             [new TokensList(), 0],
+            [new TokensList(Open, Open, Num(9), Close, Close), 9],
             [new TokensList(Num(97.982m)), 97.982],
-            [new TokensList(Num(2), Plus, Num(2)), 4],
+            [new TokensList(Num(1), Plus, Num(2), Minus, Num(3)), 0],
             [new TokensList(Plus, Num(2), Plus, Num(3), Times, Num(4)), 14],
             [new TokensList(Num(2), Times, Num(35.589m), Plus, Num(4)), 75.178],
             [new TokensList(Minus, Num(1), Divide, Num(100)), -0.01],
+            [new TokensList(Open, Plus, Num(2), Plus, Num(3), Close, Times, Num(4)), 20],
+            [new TokensList(Num(3.5m), Times, Open, Plus, Num(2), Plus, Num(3), Close, Times, Num(4)), 70],
         ];
     }
 
-    public static IEnumerable<object[]> GetInvalidPostfixEquations()
+    public static IEnumerable<object[]> GetInvalidInfixEquations()
     {
         return
         [
@@ -63,6 +69,7 @@ public sealed class PostfixEquationTest
             [new TokensList(Divide, Num(9.9m))],
             [new TokensList(Num(978), Divide, NumberToken.Zero)],
             [new TokensList(Num(978), Num(978))],
+            [new TokensList(Open, Num(978), Plus, Num(4), Close, Open)],
         ];
     }
 
@@ -73,6 +80,6 @@ public sealed class PostfixEquationTest
     {
         public IReadOnlyList<IToken> Value { get; } = tokens;
 
-        public override string ToString() => String.Join(' ', Value);
+        public override string ToString() => "«" + String.Join(' ', Value) + "»";
     }
 }
