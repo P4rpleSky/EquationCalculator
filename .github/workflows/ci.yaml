@@ -1,0 +1,16 @@
+name: EquationCalculator
+
+on:
+  push:
+    branches: [ "*" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: NukeBuild
+        run: pwsh build.ps1

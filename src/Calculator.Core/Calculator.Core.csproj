@@ -4,4 +4,8 @@
         <AssemblyName>$(SolutionName).Core</AssemblyName>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Utilities\Utilities.csproj" />
+    </ItemGroup>
+
 </Project>

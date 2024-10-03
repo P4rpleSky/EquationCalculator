@@ -11,7 +11,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <CompanyName>Byndyusoft</CompanyName>
+        <CompanyName>P4rpleSky</CompanyName>
         <CurrentYear>$([System.DateTime]::Now.ToString(yyyy))</CurrentYear>
 
         <Copyright>Copyright $(CurrentYear) © $(CompanyName). All rights reserved</Copyright>
@@ -19,12 +19,8 @@
         <Company>$(CompanyName)</Company>
     </PropertyGroup>
 
-    <!--
-      This instruction automatically allows XXX.Tests to access internals of XXX.
-      Signed assemblies have to add friends manually because of public key requirement.
-    -->
     <ItemGroup>
-        <InternalsVisibleTo Include="$(CompanyName).$(SolutionName).UnitTests" />
+        <InternalsVisibleTo Include="$(SolutionName).UnitTests" />
     </ItemGroup>
 
 </Project>
