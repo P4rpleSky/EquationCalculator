@@ -7,10 +7,14 @@ namespace EquationCalculator.Core.Equations;
 
 public sealed class PostfixEquation
 {
-    private PostfixEquation(IReadOnlyList<IToken> tokens)
+    private static readonly OperatorPriorityComparer OperatorPriorityComparer = new();
+
+    private PostfixEquation(
+        IReadOnlyList<IToken> tokens,
+        decimal result)
     {
         Tokens = tokens;
-        Result = Calculate(tokens);
+        Result = result;
     }
 
     public IReadOnlyList<IToken> Tokens { get; }
@@ -19,8 +23,35 @@ public sealed class PostfixEquation
 
     public static PostfixEquation CreateFromInfixSequence(IReadOnlyList<IToken> tokens)
     {
-        var operatorPriorityComparer = new OperatorPriorityComparer();
+        tokens = InsertMissingZeros(tokens);
+        var postfixTokens = ConvertFromInfixToPostfix(tokens);
+        var result = Calculate(postfixTokens);
 
+        return new PostfixEquation(postfixTokens, result);
+    }
+
+    private static IReadOnlyList<IToken> InsertMissingZeros(IReadOnlyList<IToken> tokens)
+    {
+        var result = new List<IToken>(tokens.Count);
+
+        IToken? prevToken = null;
+        foreach (var token in tokens)
+        {
+            if (prevToken is null or OpeningBracketOperatorToken &&
+                token is AdditionOperatorToken or SubtractionOperatorToken)
+            {
+                result.Add(NumberToken.Zero);
+            }
+
+            result.Add(token);
+            prevToken = token;
+        }
+
+        return result;
+    }
+
+    private static IReadOnlyList<IToken> ConvertFromInfixToPostfix(IReadOnlyList<IToken> tokens)
+    {
         var output = new Queue<IToken>();
         var operatorStack = new Stack<IOperatorToken>();
 
@@ -59,14 +90,9 @@ public sealed class PostfixEquation
 
                 case IOperatorToken operatorToken:
                     {
-                        if (IsZeroNumberTokenInsertionNeeded(operatorStack, operatorToken))
-                        {
-                            output.Enqueue(NumberToken.Zero);
-                        }
-
                         while (operatorStack.TryPeek(out var lastOperatorToken) &&
                                lastOperatorToken is not IBracketToken &&
-                               operatorPriorityComparer.Compare(lastOperatorToken, operatorToken) >= 0)
+                               OperatorPriorityComparer.Compare(lastOperatorToken, operatorToken) >= 0)
                         {
                             operatorStack.Pop();
                             output.Enqueue(lastOperatorToken);
@@ -93,17 +119,7 @@ public sealed class PostfixEquation
             output.Enqueue(operatorToken);
         }
 
-        var outputTokens = output.ToList();
-        return new PostfixEquation(outputTokens);
-    }
-
-    public override string ToString() => String.Join(' ', Tokens);
-
-    private static bool IsZeroNumberTokenInsertionNeeded(Stack<IOperatorToken> operatorStack, IOperatorToken operatorToken)
-    {
-        return operatorToken is AdditionOperatorToken or SubtractionOperatorToken &&
-               operatorStack.TryPeek(out var prevOperatorToken) &&
-               prevOperatorToken is OpeningBracketOperatorToken;
+        return [.. output];
     }
 
     private static decimal Calculate(IReadOnlyList<IToken> tokens)
@@ -124,9 +140,13 @@ public sealed class PostfixEquation
                     break;
 
                 case IBinaryOperatorToken binaryOperatorToken:
-                    var secondOperand = operandStack.TryPop(out var operand) ? operand : null;
-                    var firstOperand = operandStack.TryPop(out operand) ? operand : null;
-                    var operationResultToken = ProcessBinaryOperationToken(binaryOperatorToken, firstOperand, secondOperand);
+                    if (!operandStack.TryPop(out var secondOperand) || !operandStack.TryPop(out var firstOperand))
+                    {
+                        throw new InvalidEquationException("Both operands for binary operator should be specified");
+                    }
+
+                    ValidateBinaryOperationTokenProcessing(binaryOperatorToken, firstOperand, secondOperand);
+                    var operationResultToken = CreateNumberToken(binaryOperatorToken, firstOperand, secondOperand);
                     operandStack.Push(operationResultToken);
                     break;
 
@@ -143,74 +163,24 @@ public sealed class PostfixEquation
         return operandStack.Single().Value;
     }
 
-    private static NumberToken ProcessBinaryOperationToken(
+    private static void ValidateBinaryOperationTokenProcessing(
         IBinaryOperatorToken binaryOperatorToken,
-        NumberToken? firstOperand,
-        NumberToken? secondOperand)
+        NumberToken firstOperand,
+        NumberToken secondOperand)
     {
-        return binaryOperatorToken switch
-        {
-            AdditionOperatorToken => ProcessAddition(firstOperand, secondOperand),
-            SubtractionOperatorToken => ProcessSubtraction(firstOperand, secondOperand),
-            MultiplicationOperatorToken => ProcessMultiplication(firstOperand, secondOperand),
-            DivisionOperatorToken => ProcessDivision(firstOperand, secondOperand),
-            _ => throw new ArgumentOutOfRangeException(nameof(binaryOperatorToken))
-        };
-    }
-
-    private static NumberToken ProcessAddition(NumberToken? firstOperand, NumberToken? secondOperand)
-    {
-        firstOperand ??= NumberToken.Zero;
-
-        if (secondOperand is null)
-        {
-            throw new InvalidEquationException("Second operand should be specified for the addition operator");
-        }
-
-        return CreateNumberToken<AdditionOperatorToken>(firstOperand, secondOperand);
-    }
-
-    private static NumberToken ProcessSubtraction(NumberToken? firstOperand, NumberToken? secondOperand)
-    {
-        firstOperand ??= NumberToken.Zero;
-
-        if (secondOperand is null)
-        {
-            throw new InvalidEquationException("Second operand should be specified for the subtraction operator");
-        }
-
-        return CreateNumberToken<SubtractionOperatorToken>(firstOperand, secondOperand);
-    }
-
-    private static NumberToken ProcessMultiplication(NumberToken? firstOperand, NumberToken? secondOperand)
-    {
-        if (firstOperand is null || secondOperand is null)
-        {
-            throw new InvalidEquationException("Both arguments should be specified for the multiplication operator");
-        }
-
-        return CreateNumberToken<MultiplicationOperatorToken>(firstOperand, secondOperand);
-    }
-
-    private static NumberToken ProcessDivision(NumberToken? firstOperand, NumberToken? secondOperand)
-    {
-        if (firstOperand is null || secondOperand is null)
-        {
-            throw new InvalidEquationException("Both arguments should be specified for the division operator");
-        }
-
-        if (secondOperand == NumberToken.Zero)
+        if (binaryOperatorToken is DivisionOperatorToken &&
+            secondOperand == NumberToken.Zero)
         {
             throw new InvalidEquationException("Division by zero isn't allowed");
         }
-
-        return CreateNumberToken<DivisionOperatorToken>(firstOperand, secondOperand);
     }
 
-    private static NumberToken CreateNumberToken<T>(NumberToken firstOperand, NumberToken secondOperand)
-        where T : IBinaryOperatorToken
+    private static NumberToken CreateNumberToken(
+        IBinaryOperatorToken token,
+        NumberToken firstOperand,
+        NumberToken secondOperand)
     {
-        var result = T.Operation.Invoke(firstOperand.Value, secondOperand.Value);
+        var result = token.Operation.Invoke(firstOperand.Value, secondOperand.Value);
         return NumberToken.Create(result);
     }
 }

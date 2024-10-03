@@ -2,7 +2,7 @@
 
 internal readonly struct MultiplicationOperatorToken : IBinaryOperatorToken
 {
-    public static BinaryOperationDelegate Operation => (first, second) => first * second;
+    public BinaryOperationDelegate Operation => (first, second) => first * second;
 
     public override string ToString() => "*";
 }

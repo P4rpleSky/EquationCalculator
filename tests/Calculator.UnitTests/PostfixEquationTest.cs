@@ -56,6 +56,8 @@ public sealed class PostfixEquationTest
             [new TokensList(Minus, Num(1), Divide, Num(100)), -0.01],
             [new TokensList(Open, Plus, Num(2), Plus, Num(3), Close, Times, Num(4)), 20],
             [new TokensList(Num(3.5m), Times, Open, Plus, Num(2), Plus, Num(3), Close, Times, Num(4)), 70],
+            // 9 * 2 + 3 + 3 * (-10+1000) / 1 + ((4 + 4) * 4) = 3023
+            [new TokensList(Num(9), Times, Num(2), Plus, Num(3), Plus, Num(3), Times, Open, Minus, Num(10), Plus, Num(1000), Close, Divide, Num(1), Plus, Open, Open, Num(4), Plus, Num(4), Close, Times, Num(4), Close), 3023],
         ];
     }
 

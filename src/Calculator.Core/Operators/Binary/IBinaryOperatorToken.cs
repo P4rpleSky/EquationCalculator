@@ -2,5 +2,5 @@
 
 internal interface IBinaryOperatorToken : IOperatorToken
 {
-    static abstract BinaryOperationDelegate Operation { get; }
+    BinaryOperationDelegate Operation { get; }
 }
