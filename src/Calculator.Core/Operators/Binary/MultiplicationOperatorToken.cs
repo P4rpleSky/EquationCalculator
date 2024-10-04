@@ -1,20 +1,11 @@
 ﻿namespace EquationCalculator.Core.Operators.Binary;
 
-internal sealed class MultiplicationOperatorToken : IBinaryOperatorToken, IEquatable<MultiplicationOperatorToken>
+internal sealed class MultiplicationOperatorToken :
+    OperatorTokenBase<MultiplicationOperatorToken>,
+    IBinaryOperatorToken,
+    IOperatorTokenDescription
 {
-    private const char Symbol = '*';
+    public static char Symbol => '*';
 
     public BinaryOperationDelegate Operation => (first, second) => first * second;
-
-    public override string ToString() => Symbol.ToString();
-
-    #region Equatable Members
-
-    public bool Equals(MultiplicationOperatorToken? other) => other is not null;
-
-    public override bool Equals(object? obj) => Equals(obj as MultiplicationOperatorToken);
-
-    public override int GetHashCode() => Symbol.GetHashCode();
-
-    #endregion
 }
