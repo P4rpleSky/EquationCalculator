@@ -147,7 +147,6 @@ public sealed class PostfixEquation
                         throw new InvalidEquationException("Both operands for binary operator should be specified");
                     }
 
-                    ValidateBinaryOperationTokenProcessing(binaryOperatorToken, firstOperand, secondOperand);
                     var operationResultToken = CreateNumberToken(binaryOperatorToken, firstOperand, secondOperand);
                     operandStack.Push(operationResultToken);
                     break;
@@ -163,18 +162,6 @@ public sealed class PostfixEquation
         }
 
         return operandStack.Single().Value;
-    }
-
-    private static void ValidateBinaryOperationTokenProcessing(
-        IBinaryOperatorToken binaryOperatorToken,
-        NumberToken firstOperand,
-        NumberToken secondOperand)
-    {
-        if (binaryOperatorToken is DivisionOperatorToken &&
-            secondOperand == NumberToken.Zero)
-        {
-            throw new InvalidEquationException("Division by zero isn't allowed");
-        }
     }
 
     private static NumberToken CreateNumberToken(
